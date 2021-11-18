@@ -1,9 +1,10 @@
 import logging
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 import PIL
 import PIL.Image
 import numpy as np
-import os
 import pathlib
 import matplotlib.pyplot as plt
 
@@ -30,13 +31,12 @@ val_set = tf.keras.utils.image_dataset_from_directory(
   image_size=(im_height, im_width),
   batch_size=batch_size)
 
-normalization_layer = tf.keras.layers.Rescaling(1./255)
-
 AUTOTUNE = tf.data.AUTOTUNE
 
 train_set = train_set.cache().prefetch(buffer_size=AUTOTUNE)
 val_set = val_set.cache().prefetch(buffer_size=AUTOTUNE)
 
+# Create model
 no_classes = 6
 
 model = tf.keras.Sequential([
@@ -62,4 +62,3 @@ model.fit(
   validation_data=val_set,
   epochs=3
 )
-
